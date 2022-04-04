@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sutom.Share", "Sutom.Share\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sutom.Game.Console", "Sutom.Game.Console\Sutom.Game.Console.csproj", "{9D895DB8-C98C-40BB-8932-46060C1E81EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sutom.Solver.Test", "Sutom.Solver.Test\Sutom.Solver.Test.csproj", "{C8321627-884C-49CA-B760-796D5C9089C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9D895DB8-C98C-40BB-8932-46060C1E81EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D895DB8-C98C-40BB-8932-46060C1E81EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D895DB8-C98C-40BB-8932-46060C1E81EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8321627-884C-49CA-B760-796D5C9089C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8321627-884C-49CA-B760-796D5C9089C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8321627-884C-49CA-B760-796D5C9089C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8321627-884C-49CA-B760-796D5C9089C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

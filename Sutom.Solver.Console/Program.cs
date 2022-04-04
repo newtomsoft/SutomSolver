@@ -2,42 +2,40 @@
 using Sutom.Solver;
 using Sutom.Solver.Console;
 
-await using var fileStream = new FileStream(@"fr.UTF-8.dic", FileMode.Open, FileAccess.Read);
-using var reader = new StreamReader(fileStream);
-
-var allWords = await WordDictionnary.GetAllWords(reader);
+var allWords = await WordDictionary.GetAllWords(@"fr.UTF-8.dic");
 
 while (true)
 {
-    var inputFirstLetter = SutomSolverRequest.RequestFirstLetter(out var inputLength);
-    var wordsToExplore = allWords[inputFirstLetter][inputLength];
+    var (firstLetter, length) = SutomSolverRequest.RequestFirstLetterAndLength();
+    var wordsToParse = allWords[firstLetter][length];
     while (true)
     {
-        if (wordsToExplore.Count == 0)
+        if (wordsToParse.Count == 0)
         {
             Console.WriteLine("No word found :(");
             break;
         }
-        var wordFound = SutomSolver.FindBestWord(wordsToExplore);
-        Console.WriteLine($"\n{wordFound}");
-        var letterStatus = SutomSolverRequest.RequestLettersStatus(wordFound);
-        while (letterStatus.First().Status == Status.NotPresent)
+        var wordFound = SutomSolver.FindBestWord(wordsToParse);
+        Console.WriteLine();
+        Console.WriteLine(wordFound);
+        var letterStatuses = SutomSolverRequest.RequestLettersStatuses(wordFound);
+        while (letterStatuses.First().Status == Status.NotPresent)
         {
-            Console.WriteLine("Finding new word...");
-            wordsToExplore.Remove(wordFound);
-            wordsToExplore = SutomSolver.GetWordsToExplore(letterStatus, wordsToExplore).ToList();
-            if (wordsToExplore.Count == 0)
+            Console.WriteLine("Finding other word...");
+            wordsToParse.Remove(wordFound);
+            wordsToParse = SutomSolver.GetWordsToExplore(letterStatuses, wordsToParse).ToList();
+            if (wordsToParse.Count == 0)
             {
                 Console.WriteLine("No word found :(");
                 break;
             }
-            wordFound = SutomSolver.FindBestWord(wordsToExplore);
+            wordFound = SutomSolver.FindBestWord(wordsToParse);
             Console.WriteLine(wordFound);
-            letterStatus = SutomSolverRequest.RequestLettersStatus(wordFound);
+            letterStatuses = SutomSolverRequest.RequestLettersStatuses(wordFound);
         }
 
-        if (letterStatus.All(s => s.Status == Status.GoodPlace)) break;
+        if (letterStatuses.All(s => s.Status == Status.GoodPlace)) break;
         Console.WriteLine("Finding new word...");
-        wordsToExplore = SutomSolver.GetWordsToExplore(letterStatus, wordsToExplore).ToList();
+        wordsToParse = SutomSolver.GetWordsToExplore(letterStatuses, wordsToParse).ToList();
     }
 }

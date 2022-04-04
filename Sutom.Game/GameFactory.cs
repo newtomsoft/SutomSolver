@@ -3,18 +3,15 @@ using Sutom.Solver;
 
 namespace Sutom.Game;
 
-public class GameFactory
+public static class GameFactory
 {
     public static async Task<string> GetRandomWord()
     {
-        await using var fileStream = new FileStream(@"fr.UTF-8.dic", FileMode.Open, FileAccess.Read);
-        using var reader = new StreamReader(fileStream);
+        var allWords = await WordDictionary.GetAllWords(@"fr.UTF-8.dic");
 
-        var allWords = await WordDictionnary.GetAllWords(reader);
-
-        const string allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var indexLetter = Random.Shared.Next(0, allChars.Length);
-        var letter = allChars[indexLetter];
+        const string allLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var indexLetter = Random.Shared.Next(0, allLetters.Length);
+        var letter = allLetters[indexLetter];
 
         var wordsByLength = allWords[letter];
 
@@ -30,8 +27,9 @@ public class GameFactory
         return wordSelected;
     }
 
-    public static HashSet<LetterStatus> GetLetterStatus(string word, string wordToFind)
+    public static HashSet<LetterStatus> GetLetterStatuses(string word, string wordToFind)
     {
+        word = word.ToUpperInvariant();
         var lettersStatus = new HashSet<LetterStatus>();
         for (var i = 0; i < wordToFind.Length; i++)
             if (word[i] == wordToFind[i]) lettersStatus.Add(new LetterStatus(i, word[i], Status.GoodPlace));

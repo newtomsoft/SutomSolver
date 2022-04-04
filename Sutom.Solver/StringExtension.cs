@@ -1,43 +1,28 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 
 namespace Sutom.Solver;
 
 public static class StringExtension
 {
-    public static int Score(this string word, string wordToCompare)
-    {
-        var states = ComputeState(word, wordToCompare);
-        var score = 0;
-        foreach (var letterState in states)
+    public static int Compare(this string word, string wordToCompare) =>
+        ComputeStatuses(word, wordToCompare).Sum(letterStatus => letterStatus switch
         {
-            switch (letterState)
-            {
-                case Status.GoodPlace:
-                    score += 3;
-                    break;
-                case Status.BadPlace:
-                    score += 1;
-                    break;
-                case Status.NotPresent:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-        return score;
-    }
-    
-    private static IEnumerable<Status> ComputeState(this string word, string wordToCompare)
+            Status.GoodPlace => 7,
+            Status.BadPlace => 3,
+            Status.NotPresent => 1,
+            _ => throw new ArgumentOutOfRangeException()
+        });
+
+    private static IEnumerable<Status> ComputeStatuses(this string word, string wordToCompare)
     {
-        var letterStates = new Status[word.Length];
+        var letterStatus = new Status[word.Length];
         var goodPlaceIndexes = new List<int>();
         for (var i = wordToCompare.Length - 1; i >= 0; i--)
         {
             if (wordToCompare[i] == word[i])
             {
                 goodPlaceIndexes.Add(i);
-                letterStates[i] = Status.GoodPlace;
+                letterStatus[i] = Status.GoodPlace;
             }
         }
 
@@ -45,27 +30,20 @@ public static class StringExtension
         var indexesCharToCompareWithOther = allIndexes.Except(goodPlaceIndexes);
 
         var partWordToCompare = wordToCompare;
-        foreach (var index in goodPlaceIndexes) partWordToCompare = partWordToCompare.RemoveAtIndex(index);
+        foreach (var index in goodPlaceIndexes)
+            partWordToCompare = partWordToCompare.RemoveAtIndex(index);
 
-        var badPlaceIndexes = new List<int>();
         foreach (var index in indexesCharToCompareWithOther)
         {
-            var firstCharEqual = partWordToCompare.FirstOrDefault(c => word[index] == c);
-            if (firstCharEqual is '\0') continue;
+            var firstLetterEqual = partWordToCompare.FirstOrDefault(c => word[index] == c);
+            if (firstLetterEqual is '\0') continue;
 
-            letterStates[index] = Status.BadPlace;
-            var indexEqual = partWordToCompare.IndexOf(firstCharEqual);
-            badPlaceIndexes.Add(indexEqual);
+            letterStatus[index] = Status.BadPlace;
+            var indexEqual = partWordToCompare.IndexOf(firstLetterEqual);
             partWordToCompare = partWordToCompare.RemoveAtIndex(indexEqual);
         }
-        return letterStates;
+        return letterStatus;
     }
 
-    private static string RemoveAtIndex(this string word, int index)
-    {
-        var sb = new StringBuilder(word);
-        sb.Remove(index, 1);
-        word = sb.ToString();
-        return word;
-    }
+    private static string RemoveAtIndex(this string word, int index) => new StringBuilder(word).Remove(index, 1).ToString();
 }

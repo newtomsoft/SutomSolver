@@ -2,19 +2,19 @@
 
 public static class SutomSolverRequest
 {
-    public static char RequestFirstLetter(out int length)
+    public static (char, int) RequestFirstLetterAndLength()
     {
         System.Console.WriteLine();
         System.Console.WriteLine("First Letter");
-        var inputFirstLetter1 = System.Console.ReadKey().KeyChar.ToString().ToUpperInvariant()[0];
+        var inputFirstLetter = System.Console.ReadKey().KeyChar.ToString().ToUpperInvariant()[0];
         System.Console.WriteLine();
         System.Console.WriteLine("Length");
-        length = int.Parse(System.Console.ReadKey().KeyChar.ToString());
+        var length = int.Parse(System.Console.ReadKey().KeyChar.ToString());
         System.Console.WriteLine();
-        return inputFirstLetter1;
+        return (inputFirstLetter, length);
     }
 
-    public static HashSet<LetterStatus> RequestLettersStatus(string word)
+    public static HashSet<LetterStatus> RequestLettersStatuses(string word)
     {
         while (true)
         {

@@ -12,10 +12,4 @@
     <ProjectReference Include="..\Sutom.Solver\Sutom.Solver.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="fr.UTF-8.dic">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
