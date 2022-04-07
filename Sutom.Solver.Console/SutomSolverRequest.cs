@@ -14,15 +14,20 @@ public static class SutomSolverRequest
         return (inputFirstLetter, length);
     }
 
-    public static HashSet<LetterStatus> RequestLettersStatuses(string word)
+    public static WordStatus RequestWordStatus(string word)
     {
         while (true)
         {
-            System.Console.WriteLine("\nGB0 ? (space if word not compliant)");
-            var lettersStatus = new HashSet<LetterStatus>();
+            System.Console.WriteLine("\nGBN (Good/Bad/No) ? (empty if word not compliant)");
             var inputString = System.Console.ReadLine();
-            if (string.IsNullOrEmpty(inputString)) continue;
-            if (inputString.Contains(' ')) return new HashSet<LetterStatus>() { new(0, 'Z', Status.NotPresent) };
+
+            var wordStatus = new WordStatus();
+            if (string.IsNullOrEmpty(inputString))
+            {
+                wordStatus.WordNotCompliant();
+                return wordStatus;
+            }
+
             inputString = inputString.ToUpperInvariant();
             for (var i = 0; i < word.Length; i++)
             {
@@ -30,12 +35,12 @@ public static class SutomSolverRequest
                 {
                     'G' => Status.GoodPlace,
                     'B' => Status.BadPlace,
-                    '0' => Status.NotPresent,
+                    'N' => Status.NotPresent,
                     _ => Status.NotPresent,
                 };
-                lettersStatus.Add(new LetterStatus(i, word[i], status));
+                wordStatus.AddLetterStatus(new LetterStatus(i, word[i], status));
             }
-            return lettersStatus;
+            return wordStatus;
         }
     }
 }

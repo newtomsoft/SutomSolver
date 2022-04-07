@@ -1,11 +1,8 @@
-﻿using Sutom.Share;
-using Sutom.Solver;
-
-namespace Sutom.Game;
+﻿namespace Sutom.Game;
 
 public static class GameFactory
 {
-    public static async Task<string> GetRandomWord()
+    public static async Task<string> AsyncGetRandomWord()
     {
         var allWords = await WordDictionary.GetAllWords(@"fr.UTF-8.dic");
 
@@ -18,8 +15,8 @@ public static class GameFactory
         List<string>? words;
         while (true)
         {
-            var numberLetters = Random.Shared.Next(4, 11);
-            var isNumberLettersSelected = wordsByLength.TryGetValue(numberLetters, out words);
+            var wordLength = Random.Shared.Next(5, 11);
+            var isNumberLettersSelected = wordsByLength.TryGetValue(wordLength, out words);
             if (isNumberLettersSelected) break;
         }
         var indexWord = Random.Shared.Next(0, words!.Count);
@@ -27,15 +24,17 @@ public static class GameFactory
         return wordSelected;
     }
 
-    public static HashSet<LetterStatus> GetLetterStatuses(string word, string wordToFind)
+    public static WordStatus GetWordStatus(string word, string wordToFind)
     {
         word = word.ToUpperInvariant();
-        var lettersStatus = new HashSet<LetterStatus>();
+        var wordStatus = new WordStatus();
         for (var i = 0; i < wordToFind.Length; i++)
-            if (word[i] == wordToFind[i]) lettersStatus.Add(new LetterStatus(i, word[i], Status.GoodPlace));
+            if (word[i] == wordToFind[i])
+                wordStatus.AddLetterStatus(new LetterStatus(i, word[i], Status.GoodPlace));
 
-        var allGoodIndexes = lettersStatus.Select(l => l.WordIndex).ToList();
-        var allGoodLetters = lettersStatus.Select(l => l.Letter).ToList();
+        var allGoodIndexes = wordStatus.LettersStatuses.Select(l => l.WordIndex).ToList();
+        var allGoodLetters = wordStatus.LettersStatuses.Select(l => l.Letter).ToList();
+
         for (var i = 0; i < wordToFind.Length; i++)
         {
             if (allGoodIndexes.Contains(i)) continue;
@@ -43,14 +42,13 @@ public static class GameFactory
             var inWordCount = wordToFind.Count(l => l == letter);
             var foundCount = allGoodLetters.Count(l => l == letter);
             if (foundCount == inWordCount)
-                lettersStatus.Add(new LetterStatus(i, letter, Status.NotPresent));
+                wordStatus.AddLetterStatus(new LetterStatus(i, letter, Status.NotPresent));
             else
             {
-                lettersStatus.Add(new LetterStatus(i, letter, Status.BadPlace));
+                wordStatus.AddLetterStatus(new LetterStatus(i, letter, Status.BadPlace));
                 allGoodLetters.Add(letter);
             }
         }
-
-        return lettersStatus;
+        return wordStatus;
     }
 }

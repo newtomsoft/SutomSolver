@@ -1,10 +1,6 @@
-﻿using Sutom.Game;
-using Sutom.Solver;
-
-while (true)
+﻿while (true)
 {
-
-    var wordToFind = await GameFactory.GetRandomWord();
+    var wordToFind = await GameFactory.AsyncGetRandomWord();
 
     Console.Write($"{wordToFind[0]}");
     for (var i = 1; i < wordToFind.Length; i++)
@@ -31,9 +27,9 @@ while (true)
         }
         //TODO is word in dictionary
 
-        var lettersStatus = GameFactory.GetLetterStatuses(word, wordToFind);
-        if (lettersStatus.All(l => l.Status == Status.GoodPlace)) break;
-        foreach (var letterStatus in lettersStatus.OrderBy(l => l.WordIndex))
+        var wordStatus = GameFactory.GetWordStatus(word, wordToFind);
+        if (wordStatus.LettersStatuses.All(l => l.Status == Status.GoodPlace)) break;
+        foreach (var letterStatus in wordStatus.LettersStatuses.OrderBy(l => l.WordIndex))
         {
             switch (letterStatus.Status)
             {

@@ -2,16 +2,18 @@
 
 public class WordStatus
 {
-    public LetterStatus[] LetterStatuses {get;}
-    
+    public HashSet<LetterStatus> LettersStatuses { get; }
+    public bool WordCompliant { get; private set; }
 
-    public WordStatus(string word)
+    public WordStatus()
     {
-        LetterStatuses = new LetterStatus[word.Length];
+        LettersStatuses = new HashSet<LetterStatus>();
+        WordCompliant = true;
     }
 
-    public WordStatus(LetterStatus[] letterStatuses)
-    {
-        LetterStatuses = letterStatuses;
-    }
+    public void AddLetterStatus(LetterStatus letterStatus) => LettersStatuses.Add(letterStatus);
+
+    public bool IsWordFound() => LettersStatuses.All(l => l.Status == Status.GoodPlace);
+
+    public void WordNotCompliant() => WordCompliant = false;
 }

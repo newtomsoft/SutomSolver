@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sutom.Solver\Sutom.Solver.csproj" />
+    <ProjectReference Include="..\Sutom.Game\Sutom.Game.csproj" />
   </ItemGroup>
 
 </Project>

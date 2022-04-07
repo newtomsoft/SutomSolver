@@ -1,0 +1,13 @@
+﻿global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using OpenQA.Selenium;
+global using OpenQA.Selenium.Edge;
+global using OpenQA.Selenium.Firefox;
+global using OpenQA.Selenium.Support.UI;
+global using SeleniumAutomationUtils.Utils;
+global using Sutom.Share;
+global using Sutom.Solver.Browser;
+global using Sutom.Solver.Browser.WebDriverFactory;
+global using WebDriverManager;
+global using WebDriverManager.DriverConfigs.Impl;

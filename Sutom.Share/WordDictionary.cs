@@ -6,7 +6,7 @@ public static class WordDictionary
     {
         await using var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
         using var reader = new StreamReader(fileStream);
-        
+
         const string allLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var wordsByFirstLetterThenLength = allLetters.ToDictionary(firstChar => firstChar, _ => new Dictionary<int, List<string>>());
         while (true)
@@ -23,7 +23,7 @@ public static class WordDictionary
             var firstLetter = word[0];
             var length = word.Length;
             var wordsByLength = wordsByFirstLetterThenLength[firstLetter];
-            var added = wordsByLength.TryAdd(length, new List<string> {word});
+            var added = wordsByLength.TryAdd(length, new List<string> { word });
             if (added is false) wordsByLength[length].Add(word);
         }
         return wordsByFirstLetterThenLength;
